@@ -1,17 +1,19 @@
 import json
 from db.models import User
-from db.session import get_session
+from db.session import SessionFactory
 
 
 # Utility to extract JSON data from a request
 def extract_request_payload(request):
-    content_length = int(request.headers['Content-Length'])
-    return json.loads(request.rfile.read(content_length).decode('utf-8'))
+    # content_length = int(request.headers['Content-Length'])
+    # return json.loads(request.rfile.read(content_length).decode('utf-8'))
+    # TODO: refactor and delete this function, it's useless. A dictionary is already being passed
+    return request
 
 
 def get_user(user_id):
     """Retrieve user details based on user_id."""
-    session = get_session()
+    session = SessionFactory()
     user = session.query(User).filter_by(id=user_id).first()
     session.close()
 
@@ -42,7 +44,7 @@ def create_user(request):
 
     user = User(username=data['username'], email=data['email'],
                 password=data['password'])  # TODO: Hash password before storage for security
-    session = get_session()
+    session = SessionFactory()
     session.add(user)
     session.commit()
     session.close()
@@ -56,7 +58,7 @@ def create_user(request):
 
 def update_user(user_id, request):
     """Update user details based on user_id."""
-    session = get_session()
+    session = SessionFactory()
     user = session.query(User).filter_by(id=user_id).first()
 
     if not user:
@@ -86,7 +88,7 @@ def update_user(user_id, request):
 
 def delete_user(user_id):
     """Delete a user based on user_id."""
-    session = get_session()
+    session = SessionFactory()
     user = session.query(User).filter_by(id=user_id).first()
 
     if not user:

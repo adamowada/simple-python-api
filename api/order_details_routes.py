@@ -1,4 +1,4 @@
-from db.session import get_session
+from db.session import SessionFactory
 from db.models import OrderDetails, Order, Product
 from http import HTTPStatus
 import json
@@ -6,7 +6,7 @@ import json
 
 def get_order_detail(order_detail_id):
     """Retrieve details for a specific order detail item."""
-    session = get_session()
+    session = SessionFactory()
     order_detail = session.query(OrderDetails).filter_by(id=order_detail_id).first()
     session.close()
 
@@ -26,7 +26,7 @@ def get_order_detail(order_detail_id):
 
 def create_order_detail(order_id, product_id, quantity):
     """Create a new order detail item."""
-    session = get_session()
+    session = SessionFactory()
 
     # Check if order and product exist
     order = session.query(Order).filter_by(id=order_id).first()
@@ -57,7 +57,7 @@ def create_order_detail(order_id, product_id, quantity):
 
 def update_order_detail(order_detail_id, quantity=None):
     """Update a specific order detail item."""
-    session = get_session()
+    session = SessionFactory()
     order_detail = session.query(OrderDetails).filter_by(id=order_detail_id).first()
 
     if not order_detail:
@@ -86,7 +86,7 @@ def update_order_detail(order_detail_id, quantity=None):
 
 def delete_order_detail(order_detail_id):
     """Delete a specific order detail item."""
-    session = get_session()
+    session = SessionFactory()
     order_detail = session.query(OrderDetails).filter_by(id=order_detail_id).first()
 
     if not order_detail:

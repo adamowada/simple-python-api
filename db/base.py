@@ -10,4 +10,4 @@ engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(bind=engine)
 
-Base = declarative_base(bind=engine, metadata=MetaData(bind=engine))
+Base = declarative_base(bind=engine, metadata=MetaData)
